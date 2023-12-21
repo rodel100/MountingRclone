@@ -1,0 +1,20 @@
+[Unit]
+Description=RClone Mount Service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=notify
+KillMode=none
+Environment=GOMAXPROCS=2
+
+ExecStart=/usr/bin/rclone mount Myseedbox:files C:\Users\rodel\Documents\mnt\seedbox \
+  --config /root/.config/rclone/rclone.conf \
+  --use-mmap \
+
+StandardOutput=file:/root/rclone_logs/rclone.log
+ExecStop=/bin/fusermount -uz /mnt/seedbox
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
